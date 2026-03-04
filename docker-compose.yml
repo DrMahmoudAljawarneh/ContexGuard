@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  mqtt_broker:
+    image: eclipse-mosquitto:2.0.15
+    container_name: contexguard_mqtt_broker
+    ports:
+      - "1883:1883"
+    volumes:
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
+    # Running without auth for local simulation testing as per standard dev setups
+    command: mosquitto -c /mosquitto-no-auth.conf
+    networks:
+      - edge_network
+
+  # Node A (Simulating the Gateway/Anomaly Detector)
+  edge_node_a:
+    build: .
+    container_name: edge_node_a
+    depends_on:
+      - mqtt_broker
+    environment:
+      - BROKER_URL=mqtt_broker
+      - NODE_ID=node_a
+    networks:
+      - edge_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+  # Node B (Subscriber)
+  edge_node_b:
+    build: .
+    container_name: edge_node_b
+    depends_on:
+      - mqtt_broker
+    environment:
+      - BROKER_URL=mqtt_broker
+      - NODE_ID=node_b
+    networks:
+      - edge_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+  # Node C (Subscriber)
+  edge_node_c:
+    build: .
+    container_name: edge_node_c
+    depends_on:
+      - mqtt_broker
+    environment:
+      - BROKER_URL=mqtt_broker
+      - NODE_ID=node_c
+    networks:
+      - edge_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+  # Node D (The node we will simulate failing)
+  edge_node_d:
+    build: .
+    container_name: edge_node_d
+    depends_on:
+      - mqtt_broker
+    environment:
+      - BROKER_URL=mqtt_broker
+      - NODE_ID=node_d
+    networks:
+      - edge_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+  # Node E
+  edge_node_e:
+    build: .
+    container_name: edge_node_e
+    depends_on:
+      - mqtt_broker
+    environment:
+      - BROKER_URL=mqtt_broker
+      - NODE_ID=node_e
+    networks:
+      - edge_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+networks:
+  edge_network:
+    driver: bridge
+
+volumes:
+  mosquitto-data:
+  mosquitto-log:
