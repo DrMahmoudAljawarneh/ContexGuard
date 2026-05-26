@@ -5,7 +5,13 @@ from core.logger import logger
 
 class AILoader:
     def __init__(self, model_dir="plugins/ai_models/"):
-        self.model_dir = model_dir
+        # Resolve relative paths relative to the framework root directory
+        if not os.path.isabs(model_dir):
+            root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            self.model_dir = os.path.join(root_dir, model_dir)
+        else:
+            self.model_dir = model_dir
+            
         self.model = None
         self.is_loaded = False
         self._load_default_model()
@@ -20,7 +26,7 @@ class AILoader:
             except Exception as e:
                 logger.error(f"Failed to load AI model: {e}")
         else:
-            logger.warning("No pre-trained model found. AI risk scoring is disabled.")
+            logger.warning(f"No pre-trained model found at {model_path}. AI risk scoring is disabled.")
 
     def is_model_loaded(self) -> bool:
         return self.is_loaded

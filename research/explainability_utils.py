@@ -2,7 +2,13 @@ import joblib
 import numpy as np
 import matplotlib.pyplot as plt
 
-def generate_feature_importance_report(model_path="../plugins/ai_models/rf_risk_model.joblib"):
+import os
+
+def generate_feature_importance_report(model_path=None):
+    if model_path is None:
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        model_path = os.path.join(project_root, "plugins", "ai_models", "rf_risk_model.joblib")
+        
     try:
         model = joblib.load(model_path)
         features = ["Device Security Score", "Location Trust", "Time Anomaly", "Network Anomaly"]

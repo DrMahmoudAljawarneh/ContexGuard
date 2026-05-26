@@ -4,7 +4,13 @@ from core.logger import logger
 
 class SensorManager:
     def __init__(self, plugin_dir="plugins/sensors/"):
-        self.plugin_dir = plugin_dir
+        # Resolve relative paths relative to the framework root directory
+        if not os.path.isabs(plugin_dir):
+            root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            self.plugin_dir = os.path.join(root_dir, plugin_dir)
+        else:
+            self.plugin_dir = plugin_dir
+            
         self.active_sensors = {}
 
     def discover_and_load(self):

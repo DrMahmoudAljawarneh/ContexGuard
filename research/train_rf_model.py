@@ -53,7 +53,8 @@ def train_and_save_model():
     print(classification_report(y_test, y_pred, target_names=['Permit (0)', 'Deny (1)']))
     
     # 4. Save Model to Plugins Directory
-    target_dir = "../plugins/ai_models"
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    target_dir = os.path.join(project_root, "plugins", "ai_models")
     os.makedirs(target_dir, exist_ok=True)
     model_path = os.path.join(target_dir, "rf_risk_model.joblib")
     

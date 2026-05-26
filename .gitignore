@@ -1,4 +1,17 @@
-echo "venv/" >> .gitignore
-echo "__pycache__/" >> .gitignore
-echo "*.pyc" >> .gitignore
-echo ".env" >> .gitignore
+.venv/
+__pycache__/
+*.pyc
+.env
+evaluation_results.json
+feature_importance_report.png
+fig1.png
+fig2.png
+logo.pdf
+revcomm.pdf
+check_tex.py
+vfastcs.aux
+vfastcs.log
+vfastcs.out
+vfastcs.suppinfo
+Latex/
+templates/
